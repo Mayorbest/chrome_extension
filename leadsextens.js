@@ -1,4 +1,4 @@
-let myLeads = [];
+let myLeads =JSON.parse(localStorage.getItem('Leads')) ||[];
 
 const url = document.querySelector('.inputbox');
 const save = document.querySelector('.savebtn');
@@ -7,16 +7,9 @@ const clearLeads = document.querySelector('.deletebtn');
 const HtmlLead = document.querySelector('.leads');
 
 function myleads () {
-let leads;
 let html = '';
-myLeads.push(url.value);
-  console.log(myLeads);
-   url.value = '';
-  localStorage.setItem('leads', JSON.stringify(myLeads));
 
- leads = JSON.parse(localStorage.getItem('leads'))
-
- leads.forEach(lead => {
+ myLeads.forEach(lead => {
   html += `<li>
               <a href="${lead}" target="_blank">${lead}
               </a>
@@ -24,12 +17,18 @@ myLeads.push(url.value);
  });
  HtmlLead.innerHTML = `<ul>${html}</ul`;
 }
-
+myleads()
 save.addEventListener('click', () => {
-  myleads();
+  const inputValue = url.value.trim();
+  if (inputValue !== '') {
+    myLeads.push(inputValue);
+    url.value = '';
+    localStorage.setItem('Leads', JSON.stringify(myLeads));
+    myleads();
+  }
 })
 clearLeads.addEventListener('click', ()=> {
   localStorage.clear();
-  myLeads.splice(0, 1)
+  myLeads = [];
   HtmlLead.innerHTML = '';
 })
